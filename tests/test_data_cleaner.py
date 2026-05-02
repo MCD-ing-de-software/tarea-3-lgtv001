@@ -88,11 +88,10 @@ class TestDataCleaner(unittest.TestCase):
 
     def test_trim_strings_strips_whitespace_without_changing_other_columns(self):
         df = make_sample_df().dropna(subset=["name"])
+        df_original = df.copy()    
         cleaner = DataCleaner()
-        result = cleaner.trim_strings(df, ["name"])
-        self.assertEqual(df.loc[0, "name"], " Alice ")
-        self.assertEqual(df.loc[1, "name"], "Bob")
-        self.assertEqual(df.loc[3, "name"], " Carol  ")
+        result = cleaner.trim_strings(df, ["name"])        
+        pdt.assert_frame_equal(df, df_original)  
         self.assertEqual(result.loc[0, "name"], "Alice")
         self.assertEqual(result.loc[1, "name"], "Bob")
         self.assertEqual(result.loc[3, "name"], "Carol")
